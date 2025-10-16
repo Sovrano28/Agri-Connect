@@ -1,5 +1,3 @@
-# Firebase Studio
+# Agri-Connect
 
-This is a NextJS starter in Firebase Studio.
-
-To get started, take a look at src/app/page.tsx.
+A Next JS + TypeScript + Tailwind CSS application for connecting farmers with the resources they need to expand their reach and grow.
