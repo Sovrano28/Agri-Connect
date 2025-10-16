@@ -1,0 +1,82 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "imageUrl": "https://picsum.photos/seed/hero/1600/900",
+      "imageHint": "african farm landscape",
+      "description": "Hero image for the landing page"
+    },
+    {
+      "id": "farm1",
+      "imageUrl": "https://picsum.photos/seed/farm1/400/300",
+      "imageHint": "farmland aerial view",
+      "description": "A farmland listing"
+    },
+    {
+      "id": "farm2",
+      "imageUrl": "https://picsum.photos/seed/farm2/400/300",
+      "imageHint": "maize field",
+      "description": "A farmland listing"
+    },
+    {
+      "id": "farm3",
+      "imageUrl": "https://picsum.photos/seed/farm3/400/300",
+      "imageHint": "vegetable farm",
+      "description": "A farmland listing"
+    },
+    {
+      "id": "farm4",
+      "imageUrl": "https://picsum.photos/seed/farm4/400/300",
+      "imageHint": "tea plantation",
+      "description": "A farmland listing"
+    },
+    {
+      "id": "tractor1",
+      "imageUrl": "https://picsum.photos/seed/tractor1/400/300",
+      "imageHint": "tractor farm",
+      "description": "An equipment listing"
+    },
+    {
+      "id": "tractor2",
+      "imageUrl": "https://picsum.photos/seed/tractor2/400/300",
+      "imageHint": "harvesting machine",
+      "description": "An equipment listing"
+    },
+    {
+      "id": "harvester1",
+      "imageUrl": "https://picsum.photos/seed/harvester1/400/300",
+      "imageHint": "combine harvester",
+      "description": "An equipment listing"
+    },
+     {
+      "id": "plow1",
+      "imageUrl": "https://picsum.photos/seed/plow1/400/300",
+      "imageHint": "farm plow",
+      "description": "An equipment listing"
+    },
+    {
+      "id": "profile_farmer",
+      "imageUrl": "https://picsum.photos/seed/profile1/100/100",
+      "imageHint": "african farmer",
+      "description": "User profile picture"
+    },
+    {
+      "id": "profile_landowner",
+      "imageUrl": "https://picsum.photos/seed/profile2/100/100",
+      "imageHint": "african landowner woman",
+      "description": "User profile picture"
+    },
+    {
+      "id": "profile_equipment_owner",
+      "imageUrl": "https://picsum.photos/seed/profile3/100/100",
+      "imageHint": "man smiling",
+      "description": "User profile picture"
+    },
+    {
+      "id": "dashboard_bg",
+      "imageUrl": "https://picsum.photos/seed/dashbg/1200/400",
+      "imageHint": "savannah landscape",
+      "description": "Dashboard header background"
+    }
+  ]
+}
