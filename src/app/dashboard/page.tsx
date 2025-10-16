@@ -11,10 +11,25 @@ export default function DashboardPage() {
   const { user, isLoading } = useAuth();
   const { t } = useLanguage();
   const [isClient, setIsClient] = useState(false);
-
+  
+  // Load bookings from localStorage (declare hooks before any early returns)
+  const [userBookings, setUserBookings] = useState<any[]>([]);
+  
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (isClient && user) {
+      try {
+        const storedBookings = JSON.parse(localStorage.getItem('agri-connect-bookings') || '[]');
+        const myBookings = storedBookings.filter((b: any) => b.userId === user.id);
+        setUserBookings(myBookings);
+      } catch (error) {
+        console.error('Failed to load bookings', error);
+      }
+    }
+  }, [isClient, user]);
 
   if (!isClient || isLoading) {
     return <div>{t('loading')}</div>;
@@ -33,7 +48,6 @@ export default function DashboardPage() {
   }
 
   const userListings = allListings.filter(l => l.ownerId === user.id);
-  const userBookings = bookings.filter(b => b.userId === user.id);
 
   return (
     <div>
@@ -106,3 +120,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

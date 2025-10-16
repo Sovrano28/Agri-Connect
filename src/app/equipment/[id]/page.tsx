@@ -1,6 +1,6 @@
 
 'use client';
-import { notFound } from "next/navigation"
+import { notFound, useRouter } from "next/navigation"
 import Image from "next/image"
 import { equipmentListings, users } from "@/lib/data"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,11 +10,14 @@ import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import React, { useEffect, useState } from "react";
+import { useAuth } from '@/lib/contexts';
+import { useToast } from '@/hooks/use-toast';
+import type { DateRange } from 'react-day-picker';
 
 type EquipmentDetailPageProps = {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 function getAIAssistHint(category: string): string {
@@ -30,18 +33,73 @@ function getAIAssistHint(category: string): string {
 
 export default function EquipmentDetailPage({ params }: EquipmentDetailPageProps) {
   const [isClient, setIsClient] = useState(false);
+  const [listingId, setListingId] = useState<string | null>(null);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    params.then(p => setListingId(p.id));
+  }, [params]);
 
-  const listing = equipmentListings.find(l => l.id === params.id)
+  if (!listingId) {
+    return <div className="container mx-auto py-12 px-4 text-center">{isClient ? 'Loading...' : ''}</div>;
+  }
+
+  const listing = equipmentListings.find(l => l.id === listingId);
 
   if (!listing) {
-    notFound()
+    notFound();
   }
 
   const owner = users.find(u => u.id === listing.ownerId);
+
+  const handleBooking = () => {
+    if (!user) {
+      toast({
+        title: 'Login required',
+        description: 'Please log in to make a booking.',
+        variant: 'destructive',
+      });
+      router.push('/login');
+      return;
+    }
+
+    if (!dateRange?.from || !dateRange?.to) {
+      toast({
+        title: 'Select dates',
+        description: 'Please select start and end dates for your booking.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Create booking
+    const newBooking = {
+      id: `booking${Date.now()}`,
+      userId: user.id,
+      listingId: listing.id,
+      listingType: 'equipment' as const,
+      startDate: dateRange.from.toISOString(),
+      endDate: dateRange.to.toISOString(),
+      status: 'pending' as const,
+      totalPrice: listing.price * Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24)),
+    };
+
+    // Store in localStorage
+    const existingBookings = JSON.parse(localStorage.getItem('agri-connect-bookings') || '[]');
+    existingBookings.push(newBooking);
+    localStorage.setItem('agri-connect-bookings', JSON.stringify(existingBookings));
+
+    toast({
+      title: 'Booking request sent!',
+      description: 'The owner will review your request.',
+    });
+
+    router.push('/dashboard');
+  };
 
   return (
     <div className="container mx-auto py-12 px-4">
@@ -126,9 +184,18 @@ export default function EquipmentDetailPage({ params }: EquipmentDetailPageProps
             <CardContent className="flex flex-col items-center">
               <Calendar
                 mode="range"
+                selected={dateRange}
+                onSelect={setDateRange}
                 className="rounded-md border"
+                disabled={(date) => date < new Date()}
               />
-              <Button size="lg" className="w-full mt-4 bg-accent text-accent-foreground hover:bg-accent/90">Request to Book</Button>
+              <Button 
+                size="lg" 
+                className="w-full mt-4 bg-accent text-accent-foreground hover:bg-accent/90"
+                onClick={handleBooking}
+              >
+                Request to Book
+              </Button>
             </CardContent>
           </Card>
         </div>
